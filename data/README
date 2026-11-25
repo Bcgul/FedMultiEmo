@@ -1,0 +1,51 @@
+# Data
+
+## FER2013 and FER+ (facial modality, not included)
+
+FER2013 (35,887 grayscale faces, 48 x 48 px, 7 emotions) cannot be redistributed.
+Download `fer2013.csv` from the Kaggle challenge *Challenges in Representation
+Learning: Facial Expression Recognition Challenge*, put it in `data/fer2013/` and run
+
+```bash
+python scripts/get_fer_data.py
+```
+
+The script checks the file against the checksum torchvision uses
+(`f8428a1edbd21e88f42c73edd2a14f95`) and downloads the FER+ votes
+(`fer2013new.csv`) from [microsoft/FERPlus](https://github.com/microsoft/FERPlus).
+As in the paper, labels are the FER+ majority vote: an image is kept when one of the
+seven emotions receives more than half of its votes (27,307 of 35,887 images:
+21,733 train, 2,854 validation, 2,720 test;
+contempt, unknown and not-a-face are dropped). The official `Usage` column defines
+the splits: `Training` (train), `PublicTest` (validation), `PrivateTest` (test).
+Set `fer.labels: fer2013` to use the original labels instead.
+
+## Physiological recordings (`physiological/`)
+
+`client_1.csv`, `client_2.csv` and `client_3.csv` are the three client files of the
+paper's federated setup. They come from a lab study at the IAS (University of
+Stuttgart) in which six participants watched emotion-eliciting video clips while a
+Fitbit Versa 3 recorded heart rate and an I²C sensor recorded skin conductance,
+about one sample every 5 s.
+
+| Column | Unit | Description |
+|---|---|---|
+| `Heart_Rate_(bpm)` | beats/min | heart rate |
+| `Skin_Conductance` | µS | electrodermal activity |
+| `Emotion_Detected` | – | emotion of the clip segment (angry, disgust, fear, happy, sad, surprise, neutral) |
+| `Emotion_Mapped` | – | numeric code used by the original scripts (neutral 0, happy 1, surprise 2, sad 3, angry 4, disgust 5, fear 6); the code maps by name instead |
+
+Things to know before using these files:
+
+* **The three files are a stratified random split of one pooled table** (3,795 rows),
+  not three participants or vehicles; class counts are almost identical in every file.
+* **No participant IDs, no time stamps, no skin temperature.** Only a random
+  train/test split is possible, and neighbouring 5-s samples of the same recording
+  session can end up on both sides of it. The window features of the paper
+  (heart-rate variability, maximum EDA, temperature fluctuation over 5-s windows)
+  cannot be computed from these files; the models use heart rate and skin
+  conductance directly, as the original code does.
+* **Sensor floor.** About 45 % of the rows read 22.4–22.9 µS, the resting value of the
+  EDA sensor; its exact value differs between recording sessions and therefore
+  between emotions, which a classifier can exploit.
+* **Disgust** was recorded for one participant only (46 rows per file).
