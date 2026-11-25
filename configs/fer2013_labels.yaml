@@ -1,0 +1,5 @@
+# Original FER2013 labels instead of the FER+ majority labels.
+fer:
+  labels: fer2013
+experiment:
+  output_dir: results_fer2013_labels
