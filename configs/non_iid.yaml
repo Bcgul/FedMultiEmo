@@ -1,0 +1,6 @@
+# Label-skewed clients: per-class shares drawn from Dirichlet(0.5).
+federated:
+  partition: dirichlet
+  dirichlet_alpha: 0.5
+experiment:
+  output_dir: results_non_iid

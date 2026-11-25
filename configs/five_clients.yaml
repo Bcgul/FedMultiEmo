@@ -1,0 +1,5 @@
+# Five federated clients instead of three (Flower: --federation-config "num_supernodes=5").
+federated:
+  num_clients: 5
+experiment:
+  output_dir: results_five_clients
