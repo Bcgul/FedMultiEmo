@@ -1,0 +1,40 @@
+{
+  "rows": 4942,
+  "participants": 6,
+  "majority_class_share": 0.21145285309591258,
+  "sensor_floor_share": 0.5760825576689599,
+  "random_split": {
+    "accuracy": {
+      "mean": 0.7241658240647117,
+      "std": 0.016073347324719347
+    },
+    "macro_f1": {
+      "mean": 0.7234361743767731,
+      "std": 0.013430548625550102
+    }
+  },
+  "within_subject_time_split": {
+    "accuracy": {
+      "mean": 0.6657084188911704,
+      "std": 0.005651482112740383
+    },
+    "macro_f1": {
+      "mean": 0.66439460693322,
+      "std": 0.004120748520983592
+    }
+  },
+  "leave_one_participant_out": {
+    "accuracy": {
+      "mean": 0.2743423715095103,
+      "std": 0.0024840131184822225
+    },
+    "macro_f1": {
+      "mean": 0.23754442604283038,
+      "std": 0.0015946285829853165
+    }
+  },
+  "floor_rows_skin_conductance_only_random_split": {
+    "accuracy": 0.4842105263157895,
+    "macro_f1": 0.44286300078907403
+  }
+}
