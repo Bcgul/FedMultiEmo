@@ -1,0 +1,38 @@
+seed: 0
+fer:
+  csv: data/fer2013/fer2013.csv
+  labels: ferplus
+  ferplus_csv: data/fer2013/fer2013new.csv
+  subsample: null
+physio:
+  client_files:
+  - data/physiological/client_1.csv
+  - data/physiological/client_2.csv
+  - data/physiological/client_3.csv
+  features:
+  - Heart_Rate_(bpm)
+  - Skin_Conductance
+  test_fraction: 0.2
+  n_estimators: 200
+  max_depth: null
+cnn:
+  learning_rate: 0.001
+  batch_size: 64
+  augment: true
+centralized:
+  epochs: 30
+  patience: 5
+federated:
+  num_clients: 3
+  partition: iid
+  dirichlet_alpha: 0.5
+  rounds: 15
+  local_epochs: 2
+fusion:
+  rules:
+  - vote
+  - average
+  - product
+  visual_weight: 0.5
+experiment:
+  output_dir: results
