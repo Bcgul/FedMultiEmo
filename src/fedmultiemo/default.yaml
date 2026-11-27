@@ -1,0 +1,54 @@
+# FedMultiEmo default configuration.
+# Every command accepts `--config file.yaml` (deep-merged onto this file) and
+# repeated `--set key.subkey=value` overrides.
+
+seed: 0
+
+fer:
+  # FER2013 pixels (Kaggle "fer2013.csv"; see data/README.md).
+  csv: data/fer2013/fer2013.csv
+  # 'ferplus': FER+ majority labels (Barsoum et al., 2016), as in the paper.
+  # 'fer2013': original FER2013 labels.
+  labels: ferplus
+  ferplus_csv: data/fer2013/fer2013new.csv
+  # Splits follow the official 'Usage' column: Training / PublicTest (validation) / PrivateTest (test).
+  subsample: null            # e.g. 0.05 for a quick smoke run; null = all images
+
+physio:
+  # One CSV per client: Heart_Rate_(bpm), Skin_Conductance, Emotion_Detected.
+  client_files:
+    - data/physiological/client_1.csv
+    - data/physiological/client_2.csv
+    - data/physiological/client_3.csv
+  features: ["Heart_Rate_(bpm)", "Skin_Conductance"]
+  test_fraction: 0.2         # stratified random split inside every client file
+  n_estimators: 200          # Random Forest, Gini criterion (paper, Sec. III)
+  max_depth: null
+
+cnn:
+  learning_rate: 0.001
+  batch_size: 64
+  augment: true              # random horizontal flip and +-10 degree rotation (paper)
+
+centralized:
+  epochs: 30
+  patience: 5                # early stopping on validation loss
+
+federated:
+  num_clients: 3             # Flower: one SuperNode per client
+  partition: iid             # iid (stratified) | dirichlet (label skew)
+  dirichlet_alpha: 0.5
+  rounds: 15
+  local_epochs: 2
+
+fusion:
+  # Decision-level fusion of the facial CNN and the physiological RF.
+  # 'vote'   : majority vote; with two modalities a disagreement is resolved in
+  #            favour of the more confident modality.
+  # 'average': weighted average of the class probabilities.
+  # 'product': weighted product (log-linear pooling) of the class probabilities.
+  rules: [vote, average, product]
+  visual_weight: 0.5
+
+experiment:
+  output_dir: results
